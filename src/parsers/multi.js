@@ -7,6 +7,14 @@ export default {
     let testsOutput = output.split('------------------------------------')
     let RESULT_REG = /,\s0 failures/g
     let SPECFILE_REG = /.+Specs:\s(.*\.js)/g
+    let blacklist = [
+      /automation.js/ig,
+      /multiPlatformTests.js/ig,
+      /mobileTests.js/ig,
+      /tophatTests.js/ig,
+      /webTests.js/ig
+    ];
+    
     testsOutput.forEach(function (test) {
       let specfile
       let result = 'failed'
@@ -20,7 +28,21 @@ export default {
       }
       if (specfile && result === 'failed') {
         if (!/node_modules/.test(specfile)) {
-          failedSpecs.push(specfile)
+          var failedSpecsSet = new Set(failedSpecs);         
+
+          if (failedSpecsSet.has(specfile) === false) {
+            var blacklisted = false;
+            for (var i = 0; i < blacklist.length; i++) {
+              if (specfile.match(blacklist[i]) !== null && !blacklisted) {
+                process.stdout.write("\n"+specfile + ' is blacklisted.');
+                blacklisted = true;
+              }
+            }
+            if (!blacklisted) {
+              process.stdout.write("\n"+'not blacklisted pushing ' + specfile);
+              failedSpecs.push(specfile);
+            }
+          }
         }
       }
     })

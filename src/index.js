@@ -13,15 +13,16 @@ const DEFAULT_OPTIONS = {
   parser: 'standard'
 }
 
-function filterArgs (protractorArgs) {
-  protractorArgs = protractorArgs.filter((arg) => !/^--(suite|specs)=/.test(arg));
-  ['--suite', '--specs'].forEach((item) => {
-    let index = protractorArgs.indexOf(item)
-    if (index !== -1) {
-      protractorArgs.splice(index, 2)
-    }
-  })
-  return protractorArgs
+var DYNAMIC_MODE_PATTERN = '-m';
+
+function filterArgs (protractorArgs, specs) {
+  var index = protractorArgs.indexOf(DYNAMIC_MODE_PATTERN);
+  if (index !== -1) {
+    protractorArgs.splice((index + 1), 1, '\'' + specs.join(',') + '\'');
+  } else {
+    protractorArgs.push(DYNAMIC_MODE_PATTERN, '\'' + specs.join(',') + '\'');
+  }
+  return protractorArgs;
 }
 
 export default function (options = {}, callback = function noop () {}) {
@@ -66,8 +67,7 @@ export default function (options = {}, callback = function noop () {}) {
     let output = ''
 
     if (specFiles.length) {
-      protractorArgs = filterArgs(protractorArgs)
-      protractorArgs.push('--specs', specFiles.join(','))
+      protractorArgs = filterArgs(protractorArgs, specFiles);
     }
 
     let protractor = spawn(
