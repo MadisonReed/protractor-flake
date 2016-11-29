@@ -6,11 +6,8 @@ export default {
     let match = null
     let FAILED_LINES = /at (?:\[object Object\]|Object)\.<anonymous> \((([A-Za-z]:\\)?.*?):.*\)/g
     let blacklist = [
-      /automation.js/ig,
-      /multiPlatformTests.js/ig,
-      /mobileTests.js/ig,
-      /tophatTests.js/ig,
-      /webTests.js/ig
+      /\/scripts\/helpers\//ig,
+      /\/mr_modules\/automation\//ig
     ]
 
     while (match = FAILED_LINES.exec(output)) { // eslint-disable-line no-cond-assign

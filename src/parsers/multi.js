@@ -8,12 +8,9 @@ export default {
     let RESULT_REG = /,\s0 failures/g
     let SPECFILE_REG = /.+Specs:\s(.*\.js)/g
     let blacklist = [
-      /automation.js/ig,
-      /multiPlatformTests.js/ig,
-      /mobileTests.js/ig,
-      /tophatTests.js/ig,
-      /webTests.js/ig
-    ];
+      /\/scripts\/helpers\//ig,
+      /\/mr_modules\/automation\//ig
+    ]
     
     testsOutput.forEach(function (test) {
       let specfile
