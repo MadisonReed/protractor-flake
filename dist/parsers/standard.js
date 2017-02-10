@@ -34,6 +34,20 @@ exports['default'] = {
         }
       }
     }
+    // let's account for error code: 1 failures
+    var log = output.split('\n');
+    var PATH_REGEX = /Specs: ([a-zA-Z_\/]+\.js)/;
+    var ERROR_CODE_REGEX = /Runner process exited unexpectedly with error code: ([0-9]+)/;
+    var path;
+    log.forEach(function (row) {
+      if (PATH_REGEX.test(row)) {
+        path = row.match(PATH_REGEX)[1];
+      }
+
+      if (ERROR_CODE_REGEX.test(row)) {
+        failedSpecs.add(path);
+      }
+    });
 
     return [].concat(_toConsumableArray(failedSpecs));
   }
