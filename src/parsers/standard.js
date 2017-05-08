@@ -32,13 +32,14 @@ export default {
     let log = output.split('\n')
     const PATH_REGEX = /Specs: ([a-zA-Z_\/]+\.js)/
     const ERROR_CODE_REGEX = /Runner process exited unexpectedly with error code: ([0-9]+)/
+    const ASSERTION_ERROR_REGEX = /Error: Failed expectation/
     var path
     log.forEach(row => {
       if (PATH_REGEX.test(row)) {
         path = row.match(PATH_REGEX)[1];
       }
 
-      if (ERROR_CODE_REGEX.test(row)) {
+      if (ERROR_CODE_REGEX.test(row) || ASSERTION_ERROR_REGEX.test(row)) {
         failedSpecs.add(path);
       }
     });

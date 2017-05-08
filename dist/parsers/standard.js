@@ -38,13 +38,14 @@ exports['default'] = {
     var log = output.split('\n');
     var PATH_REGEX = /Specs: ([a-zA-Z_\/]+\.js)/;
     var ERROR_CODE_REGEX = /Runner process exited unexpectedly with error code: ([0-9]+)/;
+    var ASSERTION_ERROR_REGEX = /Error: Failed expectation/;
     var path;
     log.forEach(function (row) {
       if (PATH_REGEX.test(row)) {
         path = row.match(PATH_REGEX)[1];
       }
 
-      if (ERROR_CODE_REGEX.test(row)) {
+      if (ERROR_CODE_REGEX.test(row) || ASSERTION_ERROR_REGEX.test(row)) {
         failedSpecs.add(path);
       }
     });
