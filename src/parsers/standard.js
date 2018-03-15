@@ -22,9 +22,10 @@ export default {
               blacklisted = true;
             }
           }
-          if (!blacklisted) {
-            failedSpecs.add(specfile);
+          if (blacklisted) {
+            continue;
           }
+          failedSpecs.add(specfile);
         }
       }
     }

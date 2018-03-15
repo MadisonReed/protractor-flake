@@ -35,10 +35,10 @@ export default {
                 blacklisted = true;
               }
             }
-            if (!blacklisted) {
-              process.stdout.write("\n"+'not blacklisted pushing ' + specfile);
-              failedSpecs.push(specfile);
+            if (blacklisted) {
+              continue;
             }
+            failedSpecs.push(specfile);
           }
         }
       }
